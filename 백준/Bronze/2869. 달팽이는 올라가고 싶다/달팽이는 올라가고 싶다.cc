@@ -9,14 +9,14 @@ int main()
 
     int prevNight = (V - A) / (A - B);
     int Night = prevNight;
-    int Height = Night * (A - B);
-    while (++Night)
+
+    if ((V - A) % (A - B) == 0)
     {
-        if (V <= Height + A)
-        {
-            break;
-        }
-        Height += (A - B);
+        Night += 1;
+    }
+    else
+    {
+        Night += 2;
     }
 
     cout << Night;
