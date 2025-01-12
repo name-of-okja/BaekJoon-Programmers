@@ -1,27 +1,24 @@
-
 def solution(bandage, health, attacks):
-    answer = health
-    bandage_time, hp, hp2 = bandage
-    tick = 0
+    hp = health
+
+    tick = 1
     for attack in attacks:
-        attack_time, damage = attack
-        bandage_hp_count = 0
+        attack_time, attack_damage = attack
+        bandage_wrapping_time, healing_per_second, bonus_healing = bandage
+        # 공격 받기 전 기본 붕대 체력 회복
+        hp += (attack_time - tick) * healing_per_second
+        # 공격 받기 전 붕대 다 감으면 보너스 회복
+        hp += ((attack_time - tick) // bandage_wrapping_time) * bonus_healing
 
-        while tick < attack_time:
-            answer += hp
-            bandage_hp_count += 1
-            tick += 1
+        tick = attack_time + 1
+        # 최대체력 보정
+        if hp >= health:
+            hp = health
 
-            if bandage_hp_count == bandage_time:
-                answer += hp2
-                bandage_hp_count = 0
-
-            if answer > health:
-                answer = health
-
-        answer -= damage
-        tick += 1
-        if answer <= 0:
+        # 공격 받기
+        hp -= attack_damage
+        # 사망
+        if hp <= 0:
             return -1
 
-    return answer
+    return hp
